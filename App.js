@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, SafeAreaView, ScrollView } from 'react-native';
 import Header from './components/Header';
 import StartGameScreen from './screens/StartGameScreen';
 import GameScreen from './screens/GameScreen';
 import GameOverScreen from './screens/GameOverScreen';
+
 
 
 const App: () => React$Node = () => {
@@ -42,12 +43,10 @@ const App: () => React$Node = () => {
   }
 
   return (
-    <View style={styles.screen}>
+    <ScrollView style={styles.screen}>
       <Header title="Guess a Number" />
       {content}
-
-    </View>
-
+    </ScrollView>
   );
 };
 

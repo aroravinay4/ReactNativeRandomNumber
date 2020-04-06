@@ -1,27 +1,49 @@
-import React from 'react';
-import { StyleSheet, View, Text, Button, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, Button, Image, Dimensions, ScrollView, SafeAreaView } from 'react-native';
 import BodyText from '../components/BodyText';
 import Colors from '../constants/Colors';
 import MainButton from '../components/MainButton';
 
 
+
 const GameOverScreen = props => {
 
+    const [availableDeviceWidth, setAvailableDeviceWidth] = useState(Dimensions.get('window').width);
+    const [availableDeviceHeight, setAvailableDeviceHeight] = useState(Dimensions.get('window').height);
+
+
+    useEffect(() => {
+        const updateLayout = () => {
+            setAvailableDeviceWidth(Dimensions.get('window').width);
+            setAvailableDeviceHeight(Dimensions.get('window').height);
+        };
+
+        Dimensions.addEventListener('change', updateLayout);
+
+        return () => {
+            Dimensions.removeEventListener('change', updateLayout);
+
+        };
+    });
+
     return (
-
-        <View style={styles.screen}>
-            <BodyText>Game is Over.</BodyText>
-            <View style={styles.imageContainer}>
-                {<Image source={require('../assets/success.png')} style={styles.image} resizeMode="cover" />}
-                {/* <Image source={{ uri: 'https://res.cloudinary.com/demo/image/fetch/fl_png8/https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png' }} /> */}
-            </View>
-            <View style={styles.resultContainer}>
-                <BodyText style={styles.resultText}>Your phone needed <Text style={styles.highlight}>{props.roundNumber}</Text> rounds to guess number
+        <SafeAreaView>
+            <ScrollView>
+                <View style={styles.screen}>
+                    <BodyText>Game is Over.</BodyText>
+                    <View style={styles.imageContainer}>
+                        {<Image source={require('../assets/success.png')} style={styles.image} resizeMode="cover" />}
+                        {/* <Image source={{ uri: 'https://res.cloudinary.com/demo/image/fetch/fl_png8/https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png' }} /> */}
+                    </View>
+                    <View style={styles.resultContainer}>
+                        <BodyText style={styles.resultText}>Your phone needed <Text style={styles.highlight}>{props.roundNumber}</Text> rounds to guess number
             <Text style={styles.highlight}>{props.userNumber}</Text></BodyText>
-            </View>
-            <MainButton onPress={props.onRestart} >New Game</MainButton>
+                    </View>
+                    <MainButton onPress={props.onRestart} >New Game</MainButton>
 
-        </View>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     );
 
 };
@@ -30,7 +52,8 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        paddingVertical: 10
     },
     image: {
         width: '100%',
@@ -38,14 +61,13 @@ const styles = StyleSheet.create({
 
     },
     imageContainer: {
-        borderRadius: 150,
-        width: 300,
+        borderRadius: Dimensions.get('window').width * 0.7 / 2,
+        width: Dimensions.get('window').width * 0.7,
         borderColor: 'black',
         borderWidth: 3,
-        height: 300,
-        overflow: 'hidden'
-
-
+        height: Dimensions.get('window').width * 0.7,
+        overflow: 'hidden',
+        marginVertical: Dimensions.get('window').height / 30,
     },
     highlight: {
         fontFamily: 'OpenSansBold',
@@ -56,13 +78,13 @@ const styles = StyleSheet.create({
     },
     resultContainer: {
         marginHorizontal: 30,
-        marginVertical: 50
+        marginVertical: Dimensions.get('window').height / 60,
 
 
     },
     resultText: {
         textAlign: "center",
-        fontSize: 20
+        fontSize: Dimensions.get('window').height < 400 ? 16 : 20,
     }
 
 
